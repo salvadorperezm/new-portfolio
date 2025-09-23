@@ -3,7 +3,7 @@ import { Geist } from "next/font/google";
 
 import { i18n, type Locale } from "@/helpers/localization";
 
-import "../../globals.css";
+import "../globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,3 +37,5 @@ export default async function RootLayout(props: {
     </html>
   );
 }
+
+export const dynamicParams = false;

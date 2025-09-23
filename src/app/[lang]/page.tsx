@@ -5,8 +5,14 @@ export default async function Home(props: {
   params: Promise<{ lang: Locale }>
 }) {
   const { lang } = await props.params;
+  const { default: MDXContent } = await import(`@/content/${lang}.mdx`);
 
   const dictionary = await getDictionary(lang);
 
-  return <h1>{dictionary["greetings"]}</h1>; 
+  return (
+    <>
+      <h1>{dictionary["greetings"]}</h1>
+      <MDXContent />
+    </>
+  ); 
 }

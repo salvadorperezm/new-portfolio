@@ -1,8 +1,8 @@
-import { getDictionary } from "@/helpers/dictionaries";
-import type { Locale } from "@/helpers/localization";
+import { getDictionary } from '@/helpers/dictionaries';
+import type { Locale } from '@/helpers/localization';
 
 export default async function Home(props: {
-  params: Promise<{ lang: Locale }>
+  params: Promise<{ lang: Locale }>;
 }) {
   const { lang } = await props.params;
   const { default: MDXContent } = await import(`@/content/${lang}.mdx`);
@@ -11,8 +11,8 @@ export default async function Home(props: {
 
   return (
     <>
-      <h1>{dictionary["greetings"]}</h1>
+      <h1>{dictionary['greetings']}</h1>
       <MDXContent />
     </>
-  ); 
+  );
 }

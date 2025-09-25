@@ -1,4 +1,4 @@
-import { MDXComponents } from "mdx/types";
+import { MDXComponents } from 'mdx/types';
 
 const components: MDXComponents = {};
 

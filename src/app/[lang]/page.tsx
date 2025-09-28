@@ -1,3 +1,5 @@
+import LocaleSwitcher from '@/components/locale-switcher';
+
 import { getDictionary } from '@/helpers/dictionaries';
 import type { Locale } from '@/helpers/localization';
 
@@ -13,6 +15,7 @@ export default async function Home(props: {
     <>
       <h1>{dictionary['greetings']}</h1>
       <MDXContent />
+      <LocaleSwitcher />
     </>
   );
 }

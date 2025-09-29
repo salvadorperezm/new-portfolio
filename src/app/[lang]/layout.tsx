@@ -3,6 +3,8 @@ import { Geist } from 'next/font/google';
 
 import { i18n, type Locale } from '@/helpers/localization';
 
+import { getThemeCookie } from '@/app/actions';
+
 import '../globals.css';
 
 const geistSans = Geist({
@@ -24,6 +26,8 @@ export default async function RootLayout(props: {
   params: Promise<{ lang: Locale }>;
 }) {
   const params = await props.params;
+  const defaultTheme = await getThemeCookie();
+  console.log('>>> default theme:', defaultTheme);
 
   const { children } = props;
 

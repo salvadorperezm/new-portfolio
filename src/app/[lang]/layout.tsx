@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import { Geist } from 'next/font/google';
 
+import ThemeProvider from '@/context/theme-context';
+
 import { i18n, type Locale } from '@/helpers/localization';
+import type { Theme } from '@/helpers/theme';
 
 import { getThemeCookie } from '@/app/actions';
 
@@ -26,15 +29,18 @@ export default async function RootLayout(props: {
   params: Promise<{ lang: Locale }>;
 }) {
   const params = await props.params;
+  // TODO: maybe there's a better way to validate defaultTheme
+  // since users can input anything on their browser
   const defaultTheme = await getThemeCookie();
-  console.log('>>> default theme:', defaultTheme);
 
   const { children } = props;
 
   return (
     <html lang={params.lang} className={`${geistSans.className} antialiased`}>
       <body className='max-w-2xl m-auto'>
-        <main className='p-6 pt-3 md:pt-6 min-h-screen'>{children}</main>
+        <ThemeProvider defaultTheme={(defaultTheme as Theme) ?? 'dark'}>
+          <main className='p-6 pt-3 md:pt-6 min-h-screen'>{children}</main>
+        </ThemeProvider>
       </body>
     </html>
   );

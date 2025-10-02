@@ -31,14 +31,14 @@ export default async function RootLayout(props: {
   const params = await props.params;
   // TODO: maybe there's a better way to validate defaultTheme
   // since users can input anything on their browser
-  const defaultTheme = await getThemeCookie();
+  const defaultTheme = (await getThemeCookie()) as Theme;
 
   const { children } = props;
 
   return (
     <html lang={params.lang} className={`${geistSans.className} antialiased`}>
       <body className='max-w-2xl m-auto'>
-        <ThemeProvider defaultTheme={(defaultTheme as Theme) ?? 'dark'}>
+        <ThemeProvider defaultTheme={defaultTheme}>
           <main className='p-6 pt-3 md:pt-6 min-h-screen'>{children}</main>
         </ThemeProvider>
       </body>

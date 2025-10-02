@@ -1,34 +1,53 @@
 'use client';
 
-import { createContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 import type { Theme } from '@/helpers/theme';
 
 type ThemeContextProps = {
   theme: Theme;
-  toggleTheme: () => void;
+  setTheme: (theme: Theme) => void;
 };
 
-const DEFAULT_THEME: ThemeContextProps = {
-  theme: 'dark',
-  toggleTheme: () => console.log('toggleTheme'),
-};
-
-const ThemeContext = createContext<ThemeContextProps>(DEFAULT_THEME);
+export const ThemeContext = createContext<ThemeContextProps | null>(null);
 
 export default function ThemeProvider(props: {
   children: React.ReactNode;
   defaultTheme: Theme;
 }) {
-  const [theme, setTheme] = useState<Theme>(props.defaultTheme ?? 'dark');
+  const [themeState, setThemeState] = useState<Theme>(props.defaultTheme);
 
-  const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
-  };
+  useEffect(() => {
+    const storedTheme = (localStorage.getItem('theme') as Theme) || null;
+
+    if (storedTheme) {
+      setThemeState(storedTheme);
+      document.documentElement.dataset.theme = storedTheme;
+    } else {
+      localStorage.setItem('theme', props.defaultTheme);
+    }
+  }, []);
+
+  function setTheme(theme: Theme) {
+    setThemeState(theme);
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+    localStorage.setItem('theme', theme);
+
+    fetch(`/api/theme?value=${theme}`);
+  }
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme: themeState, setTheme }}>
       {props.children}
     </ThemeContext.Provider>
   );
+}
+
+export function useTheme() {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useTheme must be used inside ThemeProvider');
+  }
+  return context;
 }
